@@ -1,0 +1,46 @@
+{
+  "name": "daneshwari_server",
+  "version": "1.0.0",
+  "description": "Backend API for Daneshwari Collections - Partner and Token Management System",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "migrate": "node src/utils/migrate.js",
+    "seed": "node src/utils/seedDatabase.js",
+    "status": "node -e \"const DataManager = require('./src/utils/dataManager'); DataManager.getStatus().then(console.log).catch(console.error).finally(() => process.exit(0));\"",
+    "backup": "node -e \"const DataManager = require('./src/utils/dataManager'); DataManager.backupData().then(() => process.exit(0)).catch(err => { console.error(err); process.exit(1); });\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "daneshwari",
+    "collections",
+    "billing",
+    "token",
+    "otp",
+    "postgresql",
+    "express",
+    "api",
+    "nodejs"
+  ],
+  "author": "Daneshwari Solutions",
+  "license": "ISC",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.10.0",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.4",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
