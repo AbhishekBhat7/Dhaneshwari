@@ -10,6 +10,7 @@ const authRoutes = require('./routes/authRoutes');
 const partnerRoutes = require('./routes/partnerRoutes');
 const tokenRoutes = require('./routes/tokenRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const gAuth = require('./routes/gAuthRoutes');
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', gAuth);
 app.use('/api/partners', partnerRoutes);
 app.use('/api/tokens', tokenRoutes);
 app.use('/api/dashboard', dashboardRoutes);

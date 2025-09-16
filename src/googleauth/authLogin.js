@@ -1,18 +1,10 @@
 const express = require('express');
-const client =  require('../config/database');
+const { pool } = require('../config/database');
 const bodyParser = require('body-parser');
-const app = express();
-const router = express.Router();
-
-// Middleware to parse JSON bodies
+const app = express(); 
 app.use(bodyParser.json());
-
-// Connect to PostgreSQL
-client.connect()
-  .then(() => console.log('Connected to PostgreSQL'))
-  .catch((err) => console.error('Connection error', err.stack));
-
-// Login user endpoint
+  
+ 
   const authlogin = async (req, res) => {
   const { email } = req.body;  
 
@@ -21,15 +13,14 @@ client.connect()
   }
   
 
-  try {
-    // Check if the user exists with the email
+  try { 
     const checkQuery = `
       SELECT  email, name, firebase_uid
-      FROM customers
+      FROM partners
       WHERE email = $1 
     `;
     const checkValues = [email];
-    const checkResult = await client.query(checkQuery, checkValues);
+    const checkResult = await pool.query(checkQuery, checkValues);
 
     if (checkResult.rows.length === 0) {
  
@@ -38,8 +29,7 @@ client.connect()
 
     const user = checkResult.rows[0];
     console.log(`User logged in with ID: ${user.email}`);
-
-    // Send a response with the userId, email, and firebase_uid
+  
     return res.status(200).json({
       message: 'Login successful',
        email: user.email,
@@ -53,5 +43,5 @@ client.connect()
   }
 };
 
-
+ 
 module.exports = {authlogin};
