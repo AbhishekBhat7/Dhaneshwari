@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const { testConnection } = require('./config/database');
+const { testConnection } = require('./config/database'); 
 
 // Route imports
 const authRoutes = require('./routes/authRoutes');
@@ -24,7 +24,7 @@ app.use(helmet({
 
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-frontend-domain.com'] 
+    ? ['daneshwari-aqfhfrgrcvbzc2a0.westindia-01.azurewebsites.net'] 
     : ['http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -66,6 +66,14 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Default root route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to Daneshwari API. Please visit /api for API documentation.'
+  });
+});
+ 
 // API documentation endpoint
 app.get('/api', (req, res) => {
   res.status(200).json({
@@ -153,3 +161,7 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 module.exports = app;
+
+
+ 
+
