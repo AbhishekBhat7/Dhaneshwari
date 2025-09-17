@@ -13,6 +13,7 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const gAuth = require('./routes/gAuthRoutes');
 
 const app = express();
+app.set('trust proxy', true);
 
 // Test database connection on startup
 testConnection();
