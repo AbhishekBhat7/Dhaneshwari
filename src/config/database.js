@@ -76,36 +76,43 @@
 
 
 
-const { Pool } = require('pg');
+const { Pool } = require("pg");
+require("dotenv").config();
 
-// Database connection pool
 const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  ssl: process.env.DB_SSL === 'require' ? { rejectUnauthorized: true } : false,
-  
-  // Connection pool settings
-  max: 20, // Max number of connections in the pool
-  idleTimeoutMillis: 30000, // Time before an idle client is closed
-  connectionTimeoutMillis: 10000, // Max time to wait for a connection to be established
+  database: process.env.DB_NAME,
+  connectionTimeoutMillis: 20000,
+  idleTimeoutMillis: 20000,
+  max: 10,
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: true }
+      : false,
 });
 
-// Test database connection
+pool
+  .connect()
+  .then(() => {
+    console.log("Connected to PostgreSQL database.");
+  })
+  .catch((err) => {
+    console.error("Error connecting to PostgreSQL database", err.stack);
+  });
+
 const testConnection = async () => {
   try {
     const client = await pool.connect();
     console.log('✅ PostgreSQL Connected Successfully');
-    
     const result = await client.query('SELECT NOW()');
-    console.log('Database time:', result.rows[0].now);
-    
-    client.release(); // Always release the client after use to avoid leaks
+    console.log('🕗 Database time:', result.rows[0].now);
+    client.release();
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
-    process.exit(1); // Exit if database connection fails
+    throw error; // ✅ Throw so caller can handle it — DON’T exit here
   }
 };
 
