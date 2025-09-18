@@ -103,4 +103,4 @@ pool
     console.error("Error connecting to PostgreSQL database", err.stack);
   });
 
-module.exports = pool;
+module.exports = {pool};
