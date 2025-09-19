@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser'); 
+const port = 5000;
  
 const app = express();
 
@@ -11,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Route imports
 const authRoutes = require('./routes/authRoutes');
-const partnerRoutes = require('./routes/partnerRoutes');
+const partnerRoutes = require('./routes/partnerRoutes'); 
 const tokenRoutes = require('./routes/tokenRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const gAuth = require('./routes/gAuthRoutes');
@@ -41,4 +42,7 @@ app.get('/', (req, res) => {
   });
 }); 
 
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
 module.exports = app;
