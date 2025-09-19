@@ -90,7 +90,7 @@ const pool = new Pool({
   max: 10,
   ssl:
     process.env.NODE_ENV === "production"
-      ? { rejectUnauthorized: false }
+      ? { rejectUnauthorized: true }
       : false,
 });
 
