@@ -24,6 +24,7 @@ const partnersController = require('../controllers/partnersController1');
 
 router.get('/', partnersController.getAllPartners);
 router.get('/:id', partnersController.getPartnerById);
+router.get('/email/:email', partnersController.getPartnerByEmail);
 router.post('/', partnersController.createPartner);
 router.put('/:id', partnersController.updatePartner);
 router.delete('/:id', partnersController.deletePartner);

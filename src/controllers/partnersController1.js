@@ -1,6 +1,22 @@
 // controllers/partnersController.js
 const partnersService = require('../services/partnerService1');
 
+
+
+
+
+
+const getPartnerByEmail = async (req, res) => {
+  try {
+    const partner = await partnersService.getPartnerByEmail(req.params.email);
+    if (!partner) return res.status(404).json({ message: 'Partner not found' });
+    res.json(partner);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
 const getAllPartners = async (req, res) => {
   try {
     const partners = await partnersService.getAllPartners();
@@ -60,4 +76,5 @@ module.exports = {
   createPartner,
   updatePartner,
   deletePartner,
+   getPartnerByEmail,
 };
