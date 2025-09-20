@@ -52,7 +52,7 @@ const deletePartner = async (id) => {
 };
 
 const getPartnerByEmail = async (email) => {
-  const query = 'SELECT * FROM partners WHERE email = $1'; // PostgreSQL example
+  const query = 'SELECT * FROM partners1 WHERE email = $1'; // PostgreSQL example
   const result = await db.query(query, [email]);
   return result.rows[0];
 };
