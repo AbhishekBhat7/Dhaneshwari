@@ -52,10 +52,11 @@ const deletePartner = async (id) => {
 };
 
 const getPartnerByEmail = async (email) => {
-  const query = 'SELECT * FROM partners1 WHERE email = $1'; // PostgreSQL example
-  const result = await db.query(query, [email]);
+  const query = 'SELECT * FROM partners1 WHERE LOWER(email) = LOWER($1)';
+  const result = await pool.query(query, [email]);
   return result.rows[0];
 };
+
 
 module.exports = {
   getAllPartners,
