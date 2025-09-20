@@ -139,6 +139,31 @@ class PartnerController {
       });
     }
   }
-}
+
+   async getPartnerByEmail(req, res) {
+    try {
+      const { email } = req.params;
+      const result = await partnersService.getPartnerByEmail(email);
+
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: 'Partner not found with this email'
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        data: result
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: err.message
+      });
+    }
+  }
+};
+
 
 module.exports = new PartnerController();

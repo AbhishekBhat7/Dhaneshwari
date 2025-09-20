@@ -14,7 +14,7 @@ class Token {
           p.name as partner_name,
           p.contact_number
          FROM token t 
-         JOIN partners p ON t.partner_id = p.partner_id 
+         JOIN partners1 p ON t.partner_id = p.partner_id 
          WHERE t.issue_date = $1 
          ORDER BY t.created_at DESC`,
         [date]

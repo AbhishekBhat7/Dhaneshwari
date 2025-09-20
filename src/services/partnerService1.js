@@ -8,21 +8,21 @@ const {pool} = require('../config/database');
 
 
 
-const getAllPartners = async (page = 1, limit = 10, search = '') => {
-  const offset = (page - 1) * limit;
-  let query = 'SELECT * FROM partners1 WHERE name ILIKE $1 ORDER BY partner_id LIMIT $2 OFFSET $3';
-  let params = [`%${search}%`, limit, offset];
-  const result = await pool.query(query, params);
-  const totalResult = await pool.query('SELECT COUNT(*) FROM partners1 WHERE name ILIKE $1', [`%${search}%`]);
-  return {
-    success: true,
-    data: result.rows,
-    pagination: {
-      total: parseInt(totalResult.rows[0].count),
-      pages: Math.ceil(parseInt(totalResult.rows[0].count) / limit)
-    }
-  };
-};
+// const getAllPartners = async (page = 1, limit = 10, search = '') => {
+//   const offset = (page - 1) * limit;
+//   let query = 'SELECT * FROM partners1 WHERE name ILIKE $1 ORDER BY partner_id LIMIT $2 OFFSET $3';
+//   let params = [`%${search}%`, limit, offset];
+//   const result = await pool.query(query, params);
+//   const totalResult = await pool.query('SELECT COUNT(*) FROM partners1 WHERE name ILIKE $1', [`%${search}%`]);
+//   return {
+//     success: true,
+//     data: result.rows,
+//     pagination: {
+//       total: parseInt(totalResult.rows[0].count),
+//       pages: Math.ceil(parseInt(totalResult.rows[0].count) / limit)
+//     }
+//   };
+// };
 
 
 const getPartnerById = async (id) => {
@@ -57,7 +57,39 @@ const getPartnerByEmail = async (email) => {
   return result.rows[0];
 };
 
-
+const getAllPartners = async (page = 1, limit = 10, search = '') => {
+  const offset = (page - 1) * limit;
+  
+  // Join with token table to sum token_count per partner
+  const query = `
+    SELECT 
+      p.*, 
+      COALESCE(SUM(t.token_count), 0) AS total_tokens_count
+    FROM partners1 p
+    LEFT JOIN token t ON p.partner_id = t.partner_id
+    WHERE p.name ILIKE $1
+    GROUP BY p.partner_id, p.email, p.name, p.contact_number, p.adhaar_number, p.created_at, p.updated_at
+    ORDER BY p.partner_id
+    LIMIT $2 OFFSET $3
+  `;
+  const params = [`%${search}%`, limit, offset];
+  const result = await pool.query(query, params);
+  
+  // Total count of partners (not affected by tokens for pagination)
+  const totalResult = await pool.query(
+    'SELECT COUNT(DISTINCT p.partner_id) FROM partners1 p WHERE p.name ILIKE $1',
+    [`%${search}%`]
+  );
+  
+  return {
+    success: true,
+    data: result.rows,  // Now includes total_tokens_count
+    pagination: {
+      total: parseInt(totalResult.rows[0].count),
+      pages: Math.ceil(parseInt(totalResult.rows[0].count) / limit)
+    }
+  };
+};
 module.exports = {
   getAllPartners,
   getPartnerById,
