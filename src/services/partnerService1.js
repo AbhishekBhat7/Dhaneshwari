@@ -25,6 +25,17 @@ const {pool} = require('../config/database');
 // };
 
 
+
+
+
+
+
+
+
+
+
+
+
 const getPartnerById = async (id) => {
   const result = await pool.query('SELECT * FROM partners1 WHERE partner_id = $1', [id]);
   return result.rows[0];
